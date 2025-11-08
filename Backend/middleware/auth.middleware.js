@@ -10,6 +10,10 @@ export const protect = async (req, res, next) => {
       token = req.cookies.token;
     }
 
+    // Debug logging
+    console.log('Auth Middleware - Has token:', !!token);
+    console.log('Auth Middleware - Cookies:', Object.keys(req.cookies));
+
     // Check if token exists
     if (!token) {
       return res.status(401).json({

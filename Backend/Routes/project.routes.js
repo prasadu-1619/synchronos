@@ -24,9 +24,34 @@ router.get('/', protect, async (req, res) => {
       .populate('members.user', 'name email avatar')
       .sort('-updatedAt');
 
+    // Add counts for each project
+    const projectsWithCounts = await Promise.all(
+      projects.map(async (project) => {
+        const projectObj = project.toObject();
+
+        // Count pages
+        const pagesCount = await Page.countDocuments({ project: project._id });
+
+        // Count members (including owner)
+        const membersCount = project.members.length;
+
+        // Count tasks (cards) across all boards
+        const boards = await Board.find({ project: project._id });
+        const boardIds = boards.map(b => b._id);
+        const tasksCount = await Card.countDocuments({ board: { $in: boardIds } });
+
+        return {
+          ...projectObj,
+          pagesCount,
+          membersCount,
+          tasksCount,
+        };
+      })
+    );
+
     res.status(200).json({
       success: true,
-      projects,
+      projects: projectsWithCounts,
     });
   } catch (error) {
     console.error('Error fetching projects:', error);
@@ -48,9 +73,24 @@ router.get('/:id', protect, checkProjectAccess, async (req, res) => {
       .populate('pages')
       .populate('boards');
 
+    // Add counts
+    const projectObj = project.toObject();
+    
+    const pagesCount = await Page.countDocuments({ project: project._id });
+    const membersCount = project.members.length;
+    
+    const boards = await Board.find({ project: project._id });
+    const boardIds = boards.map(b => b._id);
+    const tasksCount = await Card.countDocuments({ board: { $in: boardIds } });
+
     res.status(200).json({
       success: true,
-      project,
+      project: {
+        ...projectObj,
+        pagesCount,
+        membersCount,
+        tasksCount,
+      },
     });
   } catch (error) {
     console.error('Error fetching project:', error);
