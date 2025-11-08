@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  @apply font-jost;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Editor Styles */
+.editor-container {
+  @apply min-h-screen;
+}
+
+.editor-content {
+  @apply prose prose-lg dark:prose-invert max-w-none;
+}
+
+.editor-content h1 {
+  @apply text-4xl font-bold mb-4 mt-6 text-gray-900 dark:text-white;
+}
+
+.editor-content h1 strong {
+  @apply font-extrabold text-blue-600 dark:text-blue-400;
+}
+
+.editor-content h2 {
+  @apply text-3xl font-bold mb-3 mt-5 text-gray-800 dark:text-gray-100;
+}
+
+.editor-content h2 strong {
+  @apply font-extrabold text-blue-600 dark:text-blue-400;
+}
+
+.editor-content h3 {
+  @apply text-2xl font-bold mb-2 mt-4 text-gray-700 dark:text-gray-200;
+}
+
+.editor-content h3 strong {
+  @apply font-extrabold text-blue-600 dark:text-blue-400;
+}
+
+.editor-content p {
+  @apply mb-4 text-gray-900 dark:text-gray-100;
+}
+
+.editor-content strong {
+  @apply font-extrabold text-gray-900 dark:text-white;
+}
+
+.editor-content em {
+  @apply italic text-gray-800 dark:text-gray-200;
+}
+
+.editor-content h1 em,
+.editor-content h2 em,
+.editor-content h3 em {
+  @apply italic text-purple-600 dark:text-purple-400;
+}
+
+.editor-content ul,
+.editor-content ol {
+  @apply mb-4 ml-6;
+}
+
+.editor-content li {
+  @apply mb-2;
+}
+
+.editor-content code {
+  @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm;
+}
+
+.editor-content pre {
+  @apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.editor-content blockquote {
+  @apply border-l-4 border-blue-500 pl-4 italic my-4;
+}
+
+.editor-content table {
+  @apply w-full border-collapse mb-4;
+}
+
+.editor-content th,
+.editor-content td {
+  @apply border border-gray-300 dark:border-gray-600 px-4 py-2;
+}
+
+.editor-content th {
+  @apply bg-gray-100 dark:bg-gray-800 font-semibold;
+}
+
+/* Drag and Drop */
+.dragging {
+  @apply opacity-50;
+}
+
+.drag-over {
+  @apply border-2 border-dashed border-blue-500;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Card Hover Effects */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+/* Button Styles */
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+.btn-outline {
+  @apply border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+.btn-ghost {
+  @apply text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+/* Input Styles */
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200;
+}
+
+/* Toast/Notification Styles */
+.toast {
+  @apply fixed top-4 right-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 animate-slide-in-right z-50;
+}
+
+.toast-success {
+  @apply border-l-4 border-green-500;
+}
+
+.toast-error {
+  @apply border-l-4 border-red-500;
+}
+
+.toast-info {
+  @apply border-l-4 border-blue-500;
+}
+
+.toast-warning {
+  @apply border-l-4 border-yellow-500;
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 animate-fade-in;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  @apply h-full transition-all duration-300;
+}
+
+.sidebar-collapsed {
+  @apply w-16;
+}
+
+.sidebar-expanded {
+  @apply w-64;
+}
+
+/* Cursor Indicator for Collaborative Editing */
+.cursor-indicator {
+  @apply absolute w-0.5 h-5 animate-pulse-slow;
+}
+
+/* Mention Styles */
+.mention {
+  @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-1 rounded;
+}
+
+/* Loading Skeleton */
+.skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+/* Card Styles */
+.kanban-card {
+  @apply bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer border border-gray-200 dark:border-gray-700;
+}
+
+/* Page Tree Styles */
+.page-tree-item {
+  @apply py-2 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors duration-150;
+}
+
+.page-tree-item-active {
+  @apply bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400;
+}
+
+/* Version Diff Styles */
+.diff-added {
+  @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+}
+
+.diff-removed {
+  @apply bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 line-through;
+}
+
+/* Utility Classes */
+.glass-effect {
+  @apply bg-white bg-opacity-80 dark:bg-gray-900 dark:bg-opacity-80 backdrop-blur-sm;
+}
+
+.gradient-bg {
+  @apply bg-gradient-to-r from-blue-500 to-purple-600;
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent;
+}

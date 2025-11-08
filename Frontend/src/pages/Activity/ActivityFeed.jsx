@@ -1,0 +1,84 @@
+import React from 'react';
+import { Activity as ActivityIcon, Clock, User } from 'lucide-react';
+import { useTheme } from '../../contexts/ThemeContext';
+
+const ActivityFeed = () => {
+  const { isDark } = useTheme();
+  const [activities, setActivities] = React.useState([]);
+  const [filter, setFilter] = React.useState('all');
+
+  return (
+    <div className={`p-8 ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <ActivityIcon size={32} />
+          Activity Feed
+        </h1>
+        <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+          Track all changes across your projects
+        </p>
+      </div>
+
+      {/* Filters */}
+      <div className="mb-6 flex gap-2">
+        {['all', 'pages', 'boards', 'users'].map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              filter === f
+                ? 'bg-blue-600 text-white'
+                : isDark
+                ? 'bg-gray-800 hover:bg-gray-700'
+                : 'bg-white hover:bg-gray-100'
+            }`}
+          >
+            {f.charAt(0).toUpperCase() + f.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Activity List */}
+      <div className={`rounded-xl ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm`}>
+        {activities.length === 0 ? (
+          <div className="text-center py-16">
+            <ActivityIcon
+              size={48}
+              className={`mx-auto mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`}
+            />
+            <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+              No activity to display yet
+            </p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+            {activities.map((activity, index) => (
+              <div key={index} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                <div className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                    {activity.user.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium mb-1">{activity.action}</p>
+                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <User size={14} />
+                        {activity.user}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={14} />
+                        {activity.time}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ActivityFeed;
