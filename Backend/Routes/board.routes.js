@@ -47,9 +47,21 @@ router.get('/', protect, async (req, res) => {
       isArchived: false,
     }).populate('cards');
 
+    // Add card count to each board
+    const boardsWithCount = await Promise.all(
+      boards.map(async (board) => {
+        const boardObj = board.toObject();
+        const cardsCount = await Card.countDocuments({ board: board._id });
+        return {
+          ...boardObj,
+          cardsCount,
+        };
+      })
+    );
+
     res.status(200).json({
       success: true,
-      boards,
+      boards: boardsWithCount,
     });
   } catch (error) {
     console.error('Error fetching boards:', error);
@@ -70,9 +82,21 @@ router.get('/project/:projectId', protect, checkProjectAccess, async (req, res) 
       isArchived: false,
     }).populate('cards');
 
+    // Add card count to each board
+    const boardsWithCount = await Promise.all(
+      boards.map(async (board) => {
+        const boardObj = board.toObject();
+        const cardsCount = await Card.countDocuments({ board: board._id });
+        return {
+          ...boardObj,
+          cardsCount,
+        };
+      })
+    );
+
     res.status(200).json({
       success: true,
-      boards,
+      boards: boardsWithCount,
     });
   } catch (error) {
     console.error('Error fetching boards:', error);

@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '../../config/api';
 
 const InviteMemberModal = ({ isOpen, onClose, projectId, isDark, onInviteSent }) => {
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState('member');
+  const [role, setRole] = useState('viewer');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -37,7 +37,7 @@ const InviteMemberModal = ({ isOpen, onClose, projectId, isDark, onInviteSent })
 
       alert('Invitation sent successfully!');
       setEmail('');
-      setRole('member');
+      setRole('viewer');
       onInviteSent?.();
       onClose();
     } catch (error) {
@@ -117,8 +117,7 @@ const InviteMemberModal = ({ isOpen, onClose, projectId, isDark, onInviteSent })
               disabled={loading}
             >
               <option value="viewer">Viewer - Can only view content</option>
-              <option value="member">Member - Can edit content</option>
-              <option value="admin">Admin - Can manage members</option>
+              <option value="editor">Editor - Can edit and create content</option>
             </select>
           </div>
 

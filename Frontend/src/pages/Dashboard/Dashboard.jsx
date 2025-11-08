@@ -5,6 +5,9 @@ import { useProject } from '../../contexts/ProjectContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import CreateProjectModal from '../../Components/Modals/CreateProjectModal';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
+import { formatDistanceToNow } from 'date-fns';
 
 const Dashboard = () => {
   const { projects, currentProject, fetchProjects } = useProject();
@@ -20,11 +23,72 @@ const Dashboard = () => {
     const refreshDashboard = async () => {
       setIsRefreshing(true);
       await fetchProjects();
+      await fetchRecentActivity();
       setIsRefreshing(false);
     };
     
     refreshDashboard();
   }, []);
+
+  const fetchRecentActivity = async () => {
+    try {
+      const response = await axios.get(`${API_ENDPOINTS.ACTIVITIES}/user?limit=10`, {
+        withCredentials: true,
+      });
+      setRecentActivity(response.data.activities || []);
+    } catch (error) {
+      console.error('Failed to fetch recent activity:', error);
+    }
+  };
+
+  const getActivityMessage = (activity) => {
+    const userName = activity.user?.name || 'Someone';
+    const projectName = activity.project?.name || 'a project';
+    
+    switch (activity.type) {
+      case 'project_created':
+        return `${userName} created project "${projectName}"`;
+      case 'project_updated':
+        return `${userName} updated project "${projectName}"`;
+      case 'member_added':
+        return `${userName} joined "${projectName}"`;
+      case 'member_invited':
+        return `${userName} invited someone to "${projectName}"`;
+      case 'page_created':
+        return `${userName} created a page in "${projectName}"`;
+      case 'page_updated':
+        return `${userName} updated a page in "${projectName}"`;
+      case 'board_created':
+        return `${userName} created a board in "${projectName}"`;
+      case 'card_created':
+        return `${userName} created a task in "${projectName}"`;
+      case 'card_updated':
+        return `${userName} updated a task in "${projectName}"`;
+      case 'card_moved':
+        return `${userName} moved a task in "${projectName}"`;
+      case 'comment_added':
+        return `${userName} added a comment in "${projectName}"`;
+      default:
+        return `${userName} performed an action in "${projectName}"`;
+    }
+  };
+
+  // Calculate unique team members across all projects
+  const getUniqueTeamMembersCount = () => {
+    const uniqueUserIds = new Set();
+    projects.forEach(project => {
+      // Add all member user IDs to the set
+      project.members?.forEach(member => {
+        if (member.user?._id) {
+          uniqueUserIds.add(member.user._id);
+        } else if (member.user) {
+          // If user is just an ID string
+          uniqueUserIds.add(member.user.toString());
+        }
+      });
+    });
+    return uniqueUserIds.size;
+  };
 
   const stats = [
     {
@@ -42,7 +106,7 @@ const Dashboard = () => {
     {
       icon: Users,
       label: 'Team Members',
-      value: projects.reduce((acc, p) => acc + (p.membersCount || 0), 0),
+      value: getUniqueTeamMembersCount(),
       color: 'bg-purple-500',
     },
     {
@@ -209,19 +273,19 @@ const Dashboard = () => {
             </p>
           ) : (
             <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                    {activity.user.charAt(0).toUpperCase()}
+              {recentActivity.map((activity) => (
+                <div key={activity._id} className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                    {activity.user?.name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium">{activity.action}</p>
+                    <p className="font-medium">{getActivityMessage(activity)}</p>
                     <p
                       className={`text-sm ${
                         isDark ? 'text-gray-400' : 'text-gray-600'
                       }`}
                     >
-                      {activity.time}
+                      {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
                     </p>
                   </div>
                 </div>

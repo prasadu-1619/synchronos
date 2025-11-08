@@ -102,10 +102,13 @@ router.post('/', protect, async (req, res) => {
     // Create notification if user exists
     if (existingUser) {
       await createNotification({
-        user: existingUser._id,
-        type: 'invitation',
+        recipient: existingUser._id,
+        sender: req.user._id,
+        type: 'project_invite',
+        title: 'Project Invitation',
         message: `${req.user.name} invited you to join "${project.name}"`,
-        link: `/invitations/${invitation._id}`,
+        link: `/accept-invitation/${token}`,
+        project: projectId,
       });
     }
 
@@ -331,12 +334,16 @@ router.post('/:token/accept', async (req, res) => {
 
     // Create activity log
     await Activity.create({
+      type: 'member_added',
       user: user._id,
-      action: 'accepted',
-      targetType: 'invitation',
-      targetId: invitation._id,
       project: project._id,
-      description: `${user.name} joined the project via invitation`,
+      targetType: 'project',
+      targetId: project._id,
+      metadata: {
+        memberName: user.name,
+        role: invitation.role,
+        joinedVia: 'invitation',
+      },
     });
 
     // Generate JWT token for new users

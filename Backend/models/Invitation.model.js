@@ -20,8 +20,8 @@ const invitationSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['admin', 'member', 'viewer'],
-      default: 'member',
+      enum: ['viewer', 'editor'],
+      default: 'viewer',
       required: true,
     },
     status: {

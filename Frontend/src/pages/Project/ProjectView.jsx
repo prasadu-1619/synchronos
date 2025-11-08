@@ -66,6 +66,18 @@ const ProjectView = () => {
     }
   };
 
+  // Helper function to extract plain text from HTML content
+  const getPlainTextPreview = (content) => {
+    if (!content) return 'Empty page';
+    
+    // Remove HTML tags
+    const text = content.replace(/<[^>]*>/g, '');
+    // Remove extra whitespace
+    const cleaned = text.replace(/\s+/g, ' ').trim();
+    // Return first 100 characters
+    return cleaned.substring(0, 100) || 'Empty page';
+  };
+
   const createNewPage = async () => {
     try {
       const response = await axios.post(
@@ -203,7 +215,7 @@ const ProjectView = () => {
                         isDark ? 'text-gray-400' : 'text-gray-600'
                       } line-clamp-2`}
                     >
-                      {page.content?.substring(0, 100) || 'Empty page'}
+                      {getPlainTextPreview(page.content)}
                     </p>
                     <p
                       className={`text-xs mt-2 ${
