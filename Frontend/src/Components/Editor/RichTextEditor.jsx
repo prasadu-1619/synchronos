@@ -13,6 +13,7 @@ import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { createLowlight, common } from 'lowlight';
+import HardBreak from '@tiptap/extension-hard-break';
 import SlashCommands from './SlashCommands';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -40,6 +41,18 @@ const RichTextEditor = ({
     extensions: [
       StarterKit.configure({
         codeBlock: false, // We'll use CodeBlockLowlight instead
+        hardBreak: false, // We'll use HardBreak extension explicitly
+      }),
+      HardBreak.extend({
+        addKeyboardShortcuts() {
+          return {
+            'Shift-Enter': () => this.editor.commands.setHardBreak(),
+            'Enter': () => {
+              // Regular Enter creates a new paragraph
+              return this.editor.commands.splitBlock();
+            },
+          };
+        },
       }),
       Link.configure({
         openOnClick: false,
@@ -82,6 +95,13 @@ const RichTextEditor = ({
     ],
     content: initialContent || content,
     editable,
+    autofocus: false,
+    editorProps: {
+      attributes: {
+        class: 'prose prose-lg dark:prose-invert max-w-none focus:outline-none',
+        spellcheck: 'true',
+      },
+    },
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       onChange?.(html);
@@ -148,6 +168,14 @@ const RichTextEditor = ({
       onEditorReady(editor);
     }
   }, [editor, onEditorReady]);
+
+  // Update editable state when prop changes
+  useEffect(() => {
+    if (editor && editor.isEditable !== editable) {
+      editor.setEditable(editable);
+      console.log('🔧 Editor editable state updated to:', editable);
+    }
+  }, [editor, editable]);
 
   // Handle incoming content updates from other users
   useEffect(() => {

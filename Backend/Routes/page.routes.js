@@ -1,6 +1,7 @@
 import express from 'express';
 import Page from '../models/Page.model.js';
 import Project from '../models/Project.model.js';
+import Activity from '../models/Activity.model.js';
 import { protect } from '../middleware/auth.middleware.js';
 import { checkProjectAccess } from '../middleware/project.middleware.js';
 import { createActivity } from '../utils/activity.utils.js';
@@ -535,6 +536,90 @@ router.delete('/:id/comments/:commentId', protect, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error deleting comment',
+    });
+  }
+});
+
+// @route   POST /api/pages/:id/restore/:versionId
+// @desc    Restore a previous version of the page
+// @access  Private
+router.post('/:id/restore/:versionId', protect, async (req, res) => {
+  try {
+    const page = await Page.findById(req.params.id);
+    
+    if (!page) {
+      return res.status(404).json({
+        success: false,
+        message: 'Page not found',
+      });
+    }
+
+    // Check project access
+    const project = await Project.findById(page.project);
+    const hasAccess = project.members.some(
+      (member) => member.user.toString() === req.user._id.toString()
+    );
+
+    if (!hasAccess) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied',
+      });
+    }
+
+    // Find the version to restore
+    const versionToRestore = page.versions.id(req.params.versionId);
+    
+    if (!versionToRestore) {
+      return res.status(404).json({
+        success: false,
+        message: 'Version not found',
+      });
+    }
+
+    // Save current content as a new version before restoring
+    page.versions.push({
+      content: page.content,
+      title: page.title,
+      editedBy: req.user._id,
+      editedAt: new Date(),
+    });
+
+    // Restore the selected version
+    page.content = versionToRestore.content;
+    page.title = versionToRestore.title || page.title || 'Untitled Page'; // Use version title, or current title, or default
+    page.lastEditedBy = req.user._id;
+    page.updatedAt = new Date();
+
+    await page.save();
+
+    // Create activity log
+    await Activity.create({
+      type: 'page_updated',
+      user: req.user._id,
+      project: page.project,
+      targetType: 'page',
+      targetId: page._id,
+      metadata: {
+        pageName: page.title,
+        action: 'restored',
+        versionId: req.params.versionId,
+      },
+    });
+
+    await page.populate('lastEditedBy', 'name email avatar');
+
+    res.status(200).json({
+      success: true,
+      page,
+      message: 'Version restored successfully',
+    });
+  } catch (error) {
+    console.error('Error restoring version:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error restoring version',
+      error: error.message,
     });
   }
 });

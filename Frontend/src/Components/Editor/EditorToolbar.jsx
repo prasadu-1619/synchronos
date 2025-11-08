@@ -57,7 +57,7 @@ const EditorToolbar = ({ editor, isDark }) => {
 
   return (
     <div
-      className={`sticky top-0 z-10 flex flex-wrap items-center gap-1 p-2 border-b ${
+      className={`editor-toolbar sticky top-0 z-10 flex flex-wrap items-center gap-1 p-2 border-b ${
         isDark
           ? 'bg-gray-800 border-gray-700'
           : 'bg-white border-gray-200'

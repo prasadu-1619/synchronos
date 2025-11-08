@@ -96,6 +96,9 @@ app.use((err, req, res, next) => {
 });
 
 // Socket.IO connection handling
+// Track active editors for each page (edit locking)
+const pageEditors = new Map(); // pageId -> { userId, userName, socketId, timestamp }
+
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
@@ -118,10 +121,29 @@ io.on('connection', (socket) => {
     socket.userId = userId;
     socket.userName = user.name || 'Anonymous';
     socket.userColor = user.color || `#${Math.floor(Math.random()*16777215).toString(16)}`;
+    socket.currentPageId = pageId;
     
     console.log(`Socket ${socket.id} (${socket.userName}) joined page ${pageId}`);
     
-    // Notify others that a user joined
+    // Check if page is currently locked by another user
+    const currentEditor = pageEditors.get(pageId);
+    if (currentEditor && currentEditor.userId !== userId) {
+      // Page is locked by another user
+      socket.emit('page-locked', {
+        isLocked: true,
+        lockedBy: {
+          userId: currentEditor.userId,
+          userName: currentEditor.userName,
+        }
+      });
+    } else {
+      // Page is available
+      socket.emit('page-locked', {
+        isLocked: false,
+      });
+    }
+    
+    // Notify others that a user joined (as viewer)
     socket.to(`page-${pageId}`).emit('user-joined', {
       user: {
         id: userId,
@@ -133,8 +155,77 @@ io.on('connection', (socket) => {
     });
   });
 
+  // Request edit lock
+  socket.on('request-edit-lock', ({ pageId }) => {
+    const userId = socket.userId;
+    const currentEditor = pageEditors.get(pageId);
+    
+    if (!currentEditor || currentEditor.userId === userId) {
+      // Grant lock
+      pageEditors.set(pageId, {
+        userId,
+        userName: socket.userName,
+        socketId: socket.id,
+        timestamp: Date.now(),
+      });
+      
+      socket.emit('edit-lock-granted', { pageId });
+      
+      // Notify others that page is now locked
+      socket.to(`page-${pageId}`).emit('page-locked', {
+        isLocked: true,
+        lockedBy: {
+          userId,
+          userName: socket.userName,
+        }
+      });
+      
+      console.log(`🔒 Edit lock granted to ${socket.userName} for page ${pageId}`);
+    } else {
+      // Deny lock
+      socket.emit('edit-lock-denied', {
+        pageId,
+        lockedBy: {
+          userId: currentEditor.userId,
+          userName: currentEditor.userName,
+        }
+      });
+      
+      console.log(`🚫 Edit lock denied for ${socket.userName} on page ${pageId} (locked by ${currentEditor.userName})`);
+    }
+  });
+
+  // Release edit lock
+  socket.on('release-edit-lock', ({ pageId }) => {
+    const currentEditor = pageEditors.get(pageId);
+    
+    if (currentEditor && currentEditor.socketId === socket.id) {
+      pageEditors.delete(pageId);
+      
+      // Notify all users that page is now unlocked
+      io.to(`page-${pageId}`).emit('page-locked', {
+        isLocked: false,
+      });
+      
+      console.log(`🔓 Edit lock released by ${socket.userName} for page ${pageId}`);
+    }
+  });
+
   // Leave page room
-  socket.on('leave-page', (pageId) => {
+  socket.on('leave-page', ({ pageId }) => {
+    // Release lock if this user has it
+    const currentEditor = pageEditors.get(pageId);
+    if (currentEditor && currentEditor.socketId === socket.id) {
+      pageEditors.delete(pageId);
+      
+      // Notify all users that page is now unlocked
+      socket.to(`page-${pageId}`).emit('page-locked', {
+        isLocked: false,
+      });
+      
+      console.log(`🔓 Edit lock auto-released for page ${pageId}`);
+    }
+    
     // Notify others that user left
     socket.to(`page-${pageId}`).emit('user-left', {
       userId: socket.userId,
@@ -168,17 +259,42 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Real-time text changes
+  // Real-time text changes (only from the user with edit lock)
   socket.on('content-change', ({ pageId, content, cursorPosition }) => {
-    socket.to(`page-${pageId}`).emit('content-update', {
-      userId: socket.userId,
-      content,
-      cursorPosition,
-    });
+    const currentEditor = pageEditors.get(pageId);
+    
+    // Only allow content changes from the user who has the edit lock
+    if (currentEditor && currentEditor.socketId === socket.id) {
+      socket.to(`page-${pageId}`).emit('content-update', {
+        userId: socket.userId,
+        content,
+        cursorPosition,
+      });
+    } else {
+      // Unauthorized edit attempt
+      socket.emit('edit-unauthorized', {
+        message: 'You do not have edit permission for this page',
+      });
+    }
   });
 
   // Handle disconnect
   socket.on('disconnect', () => {
+    // Release any edit locks held by this socket
+    if (socket.currentPageId) {
+      const currentEditor = pageEditors.get(socket.currentPageId);
+      if (currentEditor && currentEditor.socketId === socket.id) {
+        pageEditors.delete(socket.currentPageId);
+        
+        // Notify all users that page is now unlocked
+        io.to(`page-${socket.currentPageId}`).emit('page-locked', {
+          isLocked: false,
+        });
+        
+        console.log(`🔓 Edit lock auto-released on disconnect for page ${socket.currentPageId}`);
+      }
+    }
+    
     // Notify all rooms that this user disconnected
     const rooms = Array.from(socket.rooms);
     rooms.forEach(room => {

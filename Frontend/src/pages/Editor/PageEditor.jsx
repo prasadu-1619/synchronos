@@ -30,6 +30,13 @@ const PageEditor = () => {
   const [editor, setEditor] = useState(null);
   const [saving, setSaving] = useState(false);
   const saveTimeoutRef = useRef(null);
+  
+  // Edit locking states
+  const [isPageLocked, setIsPageLocked] = useState(false);
+  const [lockedBy, setLockedBy] = useState(null);
+  const [hasEditLock, setHasEditLock] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const lastContentRef = useRef(''); // To prevent infinite loops
 
   useEffect(() => {
     if (pageId) {
@@ -56,6 +63,38 @@ const PageEditor = () => {
         name: user.name,
         email: user.email,
       },
+    });
+
+    // Listen for page lock status
+    socket.on('page-locked', (data) => {
+      setIsPageLocked(data.isLocked);
+      setLockedBy(data.lockedBy || null);
+      
+      if (data.isLocked && data.lockedBy) {
+        console.log(`🔒 Page locked by ${data.lockedBy.userName}`);
+      } else {
+        console.log('🔓 Page unlocked');
+      }
+    });
+
+    // Listen for edit lock granted
+    socket.on('edit-lock-granted', () => {
+      setHasEditLock(true);
+      console.log('✅ Edit lock granted');
+    });
+
+    // Listen for edit lock denied
+    socket.on('edit-lock-denied', (data) => {
+      setHasEditLock(false);
+      alert(`This page is currently being edited by ${data.lockedBy.userName}. You can view but cannot edit.`);
+      console.log(`❌ Edit lock denied - locked by ${data.lockedBy.userName}`);
+    });
+
+    // Listen for unauthorized edit attempts
+    socket.on('edit-unauthorized', (data) => {
+      console.error('🚫 Unauthorized edit attempt:', data.message);
+      setIsEditing(false);
+      setHasEditLock(false);
     });
 
     // Listen for user events
@@ -86,13 +125,40 @@ const PageEditor = () => {
       }
     });
 
+    // Listen for content updates from other users (prevent infinite loop)
+    socket.on('content-update', (data) => {
+      if (data.userId !== user._id && editor && data.content !== lastContentRef.current) {
+        console.log('📝 Received content update from another user');
+        lastContentRef.current = data.content;
+        
+        // Update editor content without triggering onChange
+        const currentPos = editor.state.selection.anchor;
+        editor.commands.setContent(data.content, false);
+        
+        // Try to restore cursor position
+        if (currentPos && currentPos <= editor.state.doc.content.size) {
+          editor.commands.setTextSelection(currentPos);
+        }
+      }
+    });
+
     return () => {
+      // Release edit lock if we have it
+      if (hasEditLock) {
+        socket.emit('release-edit-lock', { pageId });
+      }
+      
       socket.emit('leave-page', { pageId });
+      socket.off('page-locked');
+      socket.off('edit-lock-granted');
+      socket.off('edit-lock-denied');
+      socket.off('edit-unauthorized');
       socket.off('user-joined');
       socket.off('user-left');
       socket.off('cursor-update');
+      socket.off('content-update');
     };
-  }, [socket, isConnected, pageId, user]);
+  }, [socket, isConnected, pageId, user, editor, hasEditLock]);
 
   const fetchPage = async () => {
     try {
@@ -110,6 +176,13 @@ const PageEditor = () => {
   };
 
   const handleContentUpdate = useCallback(async (newContent) => {
+    // Prevent infinite loop by checking if content actually changed
+    if (newContent === lastContentRef.current) {
+      return;
+    }
+    
+    lastContentRef.current = newContent;
+    
     // Clear existing timeout
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
@@ -158,6 +231,23 @@ const PageEditor = () => {
     }
   };
 
+  const requestEditLock = () => {
+    if (socket && isConnected) {
+      socket.emit('request-edit-lock', { pageId });
+      setIsEditing(true);
+    }
+  };
+
+  const releaseEditLock = () => {
+    if (socket && isConnected && hasEditLock) {
+      socket.emit('release-edit-lock', { pageId });
+      setHasEditLock(false);
+      setIsEditing(false);
+    }
+  };
+
+  // Set up socket listeners for user presence
+
   if (!page) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -169,26 +259,26 @@ const PageEditor = () => {
   return (
     <div className={`h-screen flex flex-col ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
       {/* Header */}
-      <div className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-200'} p-4`}>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
+      <div className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-200'} p-3 md:p-4`}>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
             <button
               onClick={() => navigate(`/project/${projectId}`)}
-              className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
+              className={`p-2 rounded ${isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-200'}`}
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={18} className="md:w-5 md:h-5" />
             </button>
             <Breadcrumbs pageId={pageId} projectId={projectId} isDark={isDark} />
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 w-full md:w-auto">
             {/* Active Users */}
             <ActiveUsers users={activeUsers} isDark={isDark} />
 
             {/* Version History */}
             <button
               onClick={() => setShowVersions(true)}
-              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
+              className={`hidden md:flex items-center gap-2 px-3 py-2 rounded ${isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-200'}`}
               title="Version History"
             >
               <Clock size={20} />
@@ -197,13 +287,13 @@ const PageEditor = () => {
             {/* Comments Toggle */}
             <button
               onClick={() => setShowComments(!showComments)}
-              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
+              className={`hidden md:flex items-center gap-2 px-3 py-2 rounded ${isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-200'}`}
             >
               <MessageSquare size={20} />
             </button>
 
             {/* Last Saved / Saving Indicator */}
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               {saving ? (
                 <span className="text-sm text-blue-500 flex items-center gap-2">
                   <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-500"></div>
@@ -232,7 +322,7 @@ const PageEditor = () => {
 
       {/* Editor with Toolbar */}
       <div className="flex-1 overflow-hidden relative">
-        {/* Editor Toolbar */}
+        {/* Editor Toolbar - Always show when editor is ready */}
         {editor && <EditorToolbar editor={editor} isDark={isDark} />}
 
         {/* Rich Text Editor with Live Cursors */}
@@ -245,6 +335,7 @@ const PageEditor = () => {
             user={user}
             isDark={isDark}
             onEditorReady={setEditor}
+            editable={true}
           />
 
           {/* Live Cursors */}

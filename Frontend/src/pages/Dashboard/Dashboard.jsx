@@ -118,39 +118,39 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className={`p-8 ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+    <div className={`p-4 md:p-6 lg:p-8 min-h-screen ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold mb-2">
           Welcome back, {user?.name}! 👋
         </h1>
-        <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+        <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
           Here's what's happening with your projects today.
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6 mb-6 md:mb-8">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className={`rounded-xl p-6 ${
+            className={`rounded-lg md:rounded-xl p-4 md:p-6 ${
               isDark ? 'bg-gray-800' : 'bg-white'
             } shadow-sm hover:shadow-md transition-shadow card-hover`}
           >
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between">
+              <div className="mb-2 md:mb-0">
                 <p
-                  className={`text-sm font-medium ${
+                  className={`text-xs md:text-sm font-medium ${
                     isDark ? 'text-gray-400' : 'text-gray-600'
                   } mb-1`}
                 >
                   {stat.label}
                 </p>
-                <p className="text-3xl font-bold">{stat.value}</p>
+                <p className="text-xl md:text-2xl lg:text-3xl font-bold">{stat.value}</p>
               </div>
-              <div className={`${stat.color} p-3 rounded-lg`}>
-                <stat.icon className="text-white" size={24} />
+              <div className={`${stat.color} p-2 md:p-3 rounded-lg`}>
+                <stat.icon className="text-white" size={18} />
               </div>
             </div>
           </div>
@@ -158,12 +158,12 @@ const Dashboard = () => {
       </div>
 
       {/* Projects Section */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Your Projects</h2>
+      <div className="mb-6 md:mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+          <h2 className="text-xl md:text-2xl font-bold">Your Projects</h2>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors w-full sm:w-auto justify-center"
           >
             <Plus size={20} />
             <span>New Project</span>
@@ -172,7 +172,7 @@ const Dashboard = () => {
 
         {projects.length === 0 ? (
           <div
-            className={`text-center py-16 rounded-xl ${
+            className={`text-center py-12 md:py-16 rounded-lg md:rounded-xl ${
               isDark ? 'bg-gray-800' : 'bg-white'
             }`}
           >
@@ -180,17 +180,17 @@ const Dashboard = () => {
               className={`mx-auto mb-4 ${
                 isDark ? 'text-gray-600' : 'text-gray-400'
               }`}
-              size={48}
+              size={40}
             />
             <h3
-              className={`text-xl font-medium mb-2 ${
+              className={`text-lg md:text-xl font-medium mb-2 ${
                 isDark ? 'text-gray-300' : 'text-gray-700'
               }`}
             >
               No Projects Yet
             </h3>
             <p
-              className={`mb-6 ${
+              className={`mb-6 text-sm md:text-base px-4 ${
                 isDark ? 'text-gray-400' : 'text-gray-600'
               }`}
             >
@@ -204,20 +204,20 @@ const Dashboard = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
             {projects.map((project) => (
               <div
                 key={project._id}
                 onClick={() => navigate(`/project/${project._id}`)}
-                className={`rounded-xl p-6 cursor-pointer ${
+                className={`rounded-lg md:rounded-xl p-4 md:p-6 cursor-pointer ${
                   isDark ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white hover:bg-gray-50'
                 } shadow-sm hover:shadow-md transition-all card-hover`}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div
-                    className={`w-12 h-12 rounded-lg ${
+                    className={`w-10 h-10 md:w-12 md:h-12 rounded-lg ${
                       project.color || 'bg-blue-500'
-                    } flex items-center justify-center text-white text-xl font-bold`}
+                    } flex items-center justify-center text-white text-lg md:text-xl font-bold`}
                   >
                     {project.name.charAt(0).toUpperCase()}
                   </div>
@@ -231,7 +231,7 @@ const Dashboard = () => {
                     {project.role || 'Member'}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{project.name}</h3>
+                <h3 className="text-base md:text-lg font-semibold mb-2">{project.name}</h3>
                 <p
                   className={`text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-600'
@@ -239,7 +239,7 @@ const Dashboard = () => {
                 >
                   {project.description || 'No description provided'}
                 </p>
-                <div className="flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-3 md:gap-4 text-xs md:text-sm">
                   <div className="flex items-center gap-1">
                     <FileText size={14} />
                     <span>{project.pagesCount || 0} pages</span>
@@ -257,31 +257,33 @@ const Dashboard = () => {
 
       {/* Recent Activity */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
+        <h2 className="text-xl md:text-2xl font-bold mb-4">Recent Activity</h2>
         <div
-          className={`rounded-xl p-6 ${
+          className={`rounded-lg md:rounded-xl p-4 md:p-6 ${
             isDark ? 'bg-gray-800' : 'bg-white'
           } shadow-sm`}
         >
           {recentActivity.length === 0 ? (
             <p
-              className={`text-center py-8 ${
+              className={`text-center py-6 md:py-8 text-sm md:text-base ${
                 isDark ? 'text-gray-400' : 'text-gray-600'
               }`}
             >
               No recent activity to display
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {recentActivity.map((activity) => (
-                <div key={activity._id} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                <div key={activity._id} className="flex items-center gap-3 md:gap-4">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm md:text-base flex-shrink-0">
                     {activity.user?.name?.charAt(0).toUpperCase() || 'U'}
                   </div>
-                  <div className="flex-1">
-                    <p className="font-medium">{getActivityMessage(activity)}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm md:text-base truncate md:whitespace-normal">
+                      {getActivityMessage(activity)}
+                    </p>
                     <p
-                      className={`text-sm ${
+                      className={`text-xs md:text-sm ${
                         isDark ? 'text-gray-400' : 'text-gray-600'
                       }`}
                     >

@@ -40,62 +40,141 @@ body {
 }
 
 .editor-content {
-  @apply prose prose-lg dark:prose-invert max-w-none;
+  @apply prose prose-lg max-w-none;
+}
+
+/* Light theme text colors - explicit black text */
+.editor-content {
+  color: #000000;
+}
+
+.editor-content.dark\:prose-invert {
+  color: #ffffff;
 }
 
 .editor-content h1 {
-  @apply text-4xl font-bold mb-4 mt-6 text-gray-900 dark:text-white;
+  @apply text-4xl font-bold mb-4 mt-6;
+  color: #111827;
+}
+
+.dark .editor-content h1 {
+  color: #ffffff;
 }
 
 .editor-content h1 strong {
-  @apply font-extrabold text-blue-600 dark:text-blue-400;
+  @apply font-extrabold;
+  color: #2563eb;
+}
+
+.dark .editor-content h1 strong {
+  color: #60a5fa;
 }
 
 .editor-content h2 {
-  @apply text-3xl font-bold mb-3 mt-5 text-gray-800 dark:text-gray-100;
+  @apply text-3xl font-bold mb-3 mt-5;
+  color: #1f2937;
+}
+
+.dark .editor-content h2 {
+  color: #f3f4f6;
 }
 
 .editor-content h2 strong {
-  @apply font-extrabold text-blue-600 dark:text-blue-400;
+  @apply font-extrabold;
+  color: #2563eb;
+}
+
+.dark .editor-content h2 strong {
+  color: #60a5fa;
 }
 
 .editor-content h3 {
-  @apply text-2xl font-bold mb-2 mt-4 text-gray-700 dark:text-gray-200;
+  @apply text-2xl font-bold mb-2 mt-4;
+  color: #374151;
+}
+
+.dark .editor-content h3 {
+  color: #e5e7eb;
 }
 
 .editor-content h3 strong {
-  @apply font-extrabold text-blue-600 dark:text-blue-400;
+  @apply font-extrabold;
+  color: #2563eb;
+}
+
+.dark .editor-content h3 strong {
+  color: #60a5fa;
 }
 
 .editor-content p {
-  @apply mb-4 text-gray-900 dark:text-gray-100;
+  @apply mb-4;
+  color: #000000;
+}
+
+.dark .editor-content p {
+  color: #f3f4f6;
 }
 
 .editor-content strong {
-  @apply font-extrabold text-gray-900 dark:text-white;
+  @apply font-extrabold;
+  color: #111827;
+}
+
+.dark .editor-content strong {
+  color: #ffffff;
 }
 
 .editor-content em {
-  @apply italic text-gray-800 dark:text-gray-200;
+  @apply italic;
+  color: #1f2937;
+}
+
+.dark .editor-content em {
+  color: #e5e7eb;
 }
 
 .editor-content h1 em,
 .editor-content h2 em,
 .editor-content h3 em {
-  @apply italic text-purple-600 dark:text-purple-400;
+  @apply italic;
+  color: #9333ea;
+}
+
+.dark .editor-content h1 em,
+.dark .editor-content h2 em,
+.dark .editor-content h3 em {
+  color: #c084fc;
 }
 
 .editor-content ul,
 .editor-content ol {
   @apply mb-4 ml-6;
+  color: #000000;
+}
+
+.dark .editor-content ul,
+.dark .editor-content ol {
+  color: #f3f4f6;
 }
 
 .editor-content li {
   @apply mb-2;
+  color: #000000;
+}
+
+.dark .editor-content li {
+  color: #f3f4f6;
 }
 
 .editor-content code {
-  @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm;
+  @apply px-2 py-1 rounded text-sm;
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+.dark .editor-content code {
+  background-color: #1f2937;
+  color: #f3f4f6;
 }
 
 .editor-content pre {
@@ -117,6 +196,40 @@ body {
 
 .editor-content th {
   @apply bg-gray-100 dark:bg-gray-800 font-semibold;
+}
+
+/* ProseMirror Styles */
+.ProseMirror {
+  @apply outline-none min-h-full;
+}
+
+.ProseMirror p {
+  margin: 0.75rem 0;
+}
+
+.ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror:focus {
+  @apply outline-none;
+}
+
+/* Ensure Enter key creates new paragraphs */
+.ProseMirror-focused {
+  outline: none !important;
 }
 
 /* Drag and Drop */

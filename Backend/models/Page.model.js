@@ -38,6 +38,7 @@ const pageSchema = new mongoose.Schema(
     versions: [
       {
         content: String,
+        title: String, // Add title to version history
         editedBy: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',

@@ -124,9 +124,9 @@ const ProjectView = () => {
   }
 
   return (
-    <div className={`flex h-screen ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
-      {/* Left Sidebar - Page Navigation Tree */}
-      <div className={`w-64 border-r ${isDark ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'} overflow-y-auto`}>
+    <div className={`flex flex-col md:flex-row h-screen ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+      {/* Left Sidebar - Page Navigation Tree - Hidden on mobile, show as drawer */}
+      <div className={`hidden md:block md:w-64 border-r ${isDark ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'} overflow-y-auto`}>
         <div className="p-4">
           <h3 className="font-semibold mb-3">Pages</h3>
           <PageNavigationTree projectId={projectId} isDark={isDark} />
@@ -134,13 +134,13 @@ const ProjectView = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">{currentProject?.name}</h1>
-              <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+        <div className="mb-6 md:mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
+            <div className="flex-1">
+              <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">{currentProject?.name}</h1>
+              <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                 {currentProject?.description || 'No description'}
               </p>
             </div>
@@ -149,19 +149,20 @@ const ProjectView = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowSearch(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800"
+                className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg ${isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-200'}`}
                 title="Search (Ctrl+K)"
               >
-                <SearchIcon size={20} />
-                <span className="text-sm">Ctrl+K</span>
+                <SearchIcon size={18} className="md:w-5 md:h-5" />
+                <span className="hidden sm:inline text-sm">Ctrl+K</span>
               </button>
               
               <button
                 onClick={() => setShowInviteModal(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white"
+                className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm md:text-base"
               >
-                <UserPlus size={20} />
-                Invite Member
+                <UserPlus size={18} className="md:w-5 md:h-5" />
+                <span className="hidden sm:inline">Invite Member</span>
+                <span className="sm:hidden">Invite</span>
               </button>
             </div>
           </div>
@@ -169,49 +170,49 @@ const ProjectView = () => {
           {/* Invitations Link */}
           <button
             onClick={() => setShowInvitations(!showInvitations)}
-            className="text-sm text-blue-500 hover:underline mb-4"
+            className="text-xs md:text-sm text-blue-500 hover:underline mb-3 md:mb-4"
           >
             {showInvitations ? 'Hide' : 'View'} Pending Invitations
           </button>
 
           {showInvitations && (
-            <div className="mb-6">
+            <div className="mb-4 md:mb-6">
               <InvitationList projectId={projectId} isDark={isDark} />
             </div>
           )}
         </div>
 
         {/* Pages Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <FileText size={24} />
+        <div className="mb-6 md:mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 md:mb-4 gap-3">
+            <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+              <FileText size={20} className="md:w-6 md:h-6" />
               Pages
             </h2>
             <button
               onClick={createNewPage}
-              className="btn-primary flex items-center gap-2"
+              className="btn-primary flex items-center gap-2 w-full sm:w-auto justify-center text-sm md:text-base"
             >
-              <Plus size={20} />
+              <Plus size={18} className="md:w-5 md:h-5" />
               New Page
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4">
             {pages.map((page) => (
               <div
                 key={page._id}
                 onClick={() => navigate(`/project/${projectId}/page/${page._id}`)}
-                className={`p-4 rounded-lg cursor-pointer ${
+                className={`p-3 md:p-4 rounded-lg cursor-pointer ${
                   isDark ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white hover:bg-gray-50'
                 } shadow-sm hover:shadow-md transition-all card-hover`}
               >
-                <div className="flex items-start gap-3">
-                  <FileText size={20} className="text-blue-500 mt-1" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-1">{page.title}</h3>
+                <div className="flex items-start gap-2 md:gap-3">
+                  <FileText size={18} className="text-blue-500 mt-1 flex-shrink-0 md:w-5 md:h-5" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold mb-1 text-sm md:text-base truncate">{page.title}</h3>
                     <p
-                      className={`text-sm ${
+                      className={`text-xs md:text-sm ${
                         isDark ? 'text-gray-400' : 'text-gray-600'
                       } line-clamp-2`}
                     >
@@ -231,11 +232,11 @@ const ProjectView = () => {
 
             {pages.length === 0 && (
               <div
-                className={`col-span-full text-center py-12 rounded-lg ${
+                className={`col-span-full text-center py-8 md:py-12 rounded-lg ${
                   isDark ? 'bg-gray-800' : 'bg-white'
                 }`}
               >
-                <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                   No pages yet. Create your first page to get started!
                 </p>
               </div>
@@ -245,35 +246,35 @@ const ProjectView = () => {
 
         {/* Boards Section */}
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <LayoutGrid size={24} />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 md:mb-4 gap-3">
+            <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+              <LayoutGrid size={20} className="md:w-6 md:h-6" />
               Kanban Boards
             </h2>
             <button
               onClick={createNewBoard}
-              className="btn-primary flex items-center gap-2"
+              className="btn-primary flex items-center gap-2 w-full sm:w-auto justify-center text-sm md:text-base"
             >
-              <Plus size={20} />
+              <Plus size={18} className="md:w-5 md:h-5" />
               New Board
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4">
             {boards.map((board) => (
               <div
                 key={board._id}
                 onClick={() => navigate(`/project/${projectId}/board/${board._id}`)}
-                className={`p-4 rounded-lg cursor-pointer ${
+                className={`p-3 md:p-4 rounded-lg cursor-pointer ${
                   isDark ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white hover:bg-gray-50'
                 } shadow-sm hover:shadow-md transition-all card-hover`}
               >
-                <div className="flex items-start gap-3">
-                  <LayoutGrid size={20} className="text-green-500 mt-1" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold mb-1">{board.name}</h3>
+                <div className="flex items-start gap-2 md:gap-3">
+                  <LayoutGrid size={18} className="text-green-500 mt-1 flex-shrink-0 md:w-5 md:h-5" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold mb-1 text-sm md:text-base truncate">{board.name}</h3>
                     <p
-                      className={`text-sm ${
+                      className={`text-xs md:text-sm ${
                         isDark ? 'text-gray-400' : 'text-gray-600'
                       }`}
                     >
@@ -293,11 +294,11 @@ const ProjectView = () => {
 
             {boards.length === 0 && (
               <div
-                className={`col-span-full text-center py-12 rounded-lg ${
+                className={`col-span-full text-center py-8 md:py-12 rounded-lg ${
                   isDark ? 'bg-gray-800' : 'bg-white'
                 }`}
               >
-                <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                <p className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                   No boards yet. Create your first Kanban board!
                 </p>
               </div>
