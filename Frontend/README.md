@@ -1,160 +1,306 @@
-# Project Management & Documentation Tool
+# Synchronos - Real-Time Collaborative Project Management
 
-A production-ready, real-time collaborative project management and documentation tool combining Confluence-style rich-text editing with Jira-style Kanban boards.
+<div align="center">
+
+![Synchronos Logo](https://via.placeholder.com/150x150?text=Synchronos)
+
+**A production-ready, real-time collaborative platform combining powerful project management with seamless documentation.**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-19.0-blue.svg)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0-green.svg)](https://www.mongodb.com/)
+
+[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Tech Stack](#-tech-stack) • [Documentation](#-documentation)
+
+</div>
+
+---
+
+## 🌟 Overview
+
+Synchronos is a comprehensive project management and collaboration platform that brings together the best of Confluence-style documentation and Jira-style task management. Built with modern technologies, it provides real-time collaboration, powerful rich-text editing, and intuitive Kanban boards—all in one seamless experience.
 
 ## 🚀 Features
 
-### ✨ Core Features (All Implemented)
+### ✨ Real-Time Collaboration
 
-#### 1. **Collaborative Rich-Text Pages**
-- Real-time multi-user editing
-- Rich formatting: headings, lists, code blocks, links, quotes
-- Markdown shortcuts support
-- Live cursor indicators (coming soon with WebSocket)
-- Auto-save functionality
-- Offline sync recovery
+#### 1. **Live Rich-Text Editing**
+- 🎨 **Tiptap Editor** - Powerful WYSIWYG editor with extensive formatting options
+- 👥 **Multi-User Editing** - See who's editing in real-time with live cursors
+- 💾 **Auto-Save** - Never lose your work with debounced auto-save (1 second)
+- 📝 **Markdown Support** - Use familiar markdown shortcuts
+- 🎯 **Smart Formatting** - Headings, lists, code blocks, tables, links, and more
+- 🔄 **Version Control** - Automatic versioning with diff viewer
+- 📜 **Version History** - Compare and restore previous versions
 
-#### 2. **Page Versioning & History**
-- Automatic version creation on major edits
-- Version comparison with diff highlights
-- Restore previous versions
-- Author and timestamp tracking
+#### 2. **Advanced Kanban Boards**
+- 🎯 **Drag & Drop** - Smooth card movement between columns
+- 👤 **Smart Assignments** - @ mention team members with autocomplete
+- 📧 **Email Notifications** - Automatic emails for assignments and status changes
+- 🏷️ **Labels & Priority** - Organize cards with custom labels and priority levels
+- 📅 **Due Dates** - Track deadlines with visual indicators
+- 💬 **Comments** - Collaborate with threaded comments
+- 🔔 **Status Updates** - Real-time notifications on card changes
 
-#### 3. **Kanban Boards**
-- Configurable columns (To Do, In Progress, Done)
-- Drag-and-drop cards with smooth animations
-- Rich card details: title, description, labels, assignee, due date
-- Inline editing
-- Link cards to documentation pages
+#### 3. **Comprehensive Dashboard**
+- 📊 **Analytics** - View team member count, active pages, and task statistics
+- 📈 **Task Distribution** - Visual breakdown of To Do, In Progress, and Done tasks
+- 🔥 **Activity Feed** - Real-time updates on all project activities
+- 👥 **Team Overview** - See who's working on what
+- 🎯 **Quick Actions** - Access recent pages and boards instantly
 
-#### 4. **Unified Activity Feed**
-- Real-time activity updates
-- Filter by user, project, or resource type
-- Track all changes across projects
+#### 4. **Smart Search**
+- 🔍 **Global Search** - Find pages, tasks, and team members instantly
+- ⚡ **Quick Results** - See results as you type
+- 🎯 **Filter by Type** - Search specific content types
+- 🔗 **Direct Navigation** - Jump to results with one click
 
-#### 5. **Multi-Project Support**
-- Easy project switching via sidebar
-- Isolated pages and boards per project
-- Team member management
-- Role-based access control
+#### 5. **Team Collaboration**
+- 👥 **Team Management** - Invite members with email invitations
+- 🔐 **Role-Based Access** - Owner, Admin, Member, Viewer roles
+- 📧 **Email Integration** - Professional HTML email templates
+- 🎨 **User Presence** - See who's online with active user indicators
+- 💬 **@Mentions** - Tag team members in cards and comments
 
-#### 6. **Access Control**
-- Role-based permissions: Owner, Admin, Editor, Viewer
-- UI-enforced restrictions
-- Visual feedback for permission levels
+#### 6. **Project Organization**
+- 📁 **Multi-Project Support** - Manage multiple projects seamlessly
+- 🗂️ **Page Hierarchy** - Organize documentation in tree structure
+- 📋 **Multiple Boards** - Create unlimited Kanban boards per project
+- 🏷️ **Custom Labels** - Color-coded organization
+- 🔍 **Project Search** - Search within specific projects
 
-#### 7. **Notifications**
-- Toast notifications for mentions and assignments
-- Real-time update notifications
-- Customizable notification preferences
-
-### 🎨 Extended Features
-
-- **Slash Commands** - Quick content insertion (`/table`, `/todo`, `/heading`)
-- **Comment Threads** - Discuss specific document sections
-- **Full-text Search** - Search across all pages and cards
-- **Custom Templates** - Meeting notes, sprint retros, etc.
-- **Light/Dark Mode** - Theme persistence across sessions
-- **Responsive Design** - Desktop and tablet optimized
+#### 7. **Professional Features**
+- 🌓 **Dark/Light Mode** - Beautiful themes for any preference
+- 📱 **Responsive Design** - Works perfectly on all devices
+- ⚡ **Real-Time Updates** - Socket.IO powered instant synchronization
+- 🔒 **Secure Authentication** - JWT-based auth with httpOnly cookies
+- 🐛 **Bug Reporting** - Built-in bug tracking system
+- 📧 **Email Notifications** - Stay updated on assignments and changes
+- 🔔 **In-App Notifications** - Real-time alerts for important events
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React.js 19** - UI framework
-- **React Router v7** - Navigation
-- **Tailwind CSS** - Styling
-- **Axios** - HTTP client
-- **Lucide React** - Icons
-- **Framer Motion** - Animations
+- **React 19** - Modern UI framework with latest features
+- **Vite 6** - Lightning-fast build tool and dev server
+- **React Router v6** - Declarative routing
+- **Tailwind CSS** - Utility-first CSS framework
+- **Tiptap 3** - Rich text editor framework (ProseMirror-based)
+- **Socket.IO Client** - Real-time bidirectional communication
+- **Axios** - Promise-based HTTP client
+- **Lucide React** - Beautiful icon library
+- **Lottie React** - Smooth animations
+- **date-fns** - Modern date utility library
 
-### Backend (Configuration Ready)
-- Single configuration file for backend API
-- RESTful API endpoints
-- WebSocket support for real-time features
-- JWT authentication ready
+### Backend
+- **Node.js & Express** - Fast, scalable server framework
+- **MongoDB & Mongoose** - NoSQL database with elegant ODM
+- **Socket.IO** - Real-time WebSocket communication
+- **Nodemailer** - Email sending service
+- **JWT** - Secure authentication tokens
+- **bcryptjs** - Password hashing
+- **Express Validator** - Input validation
+- **Helmet** - Security middleware
+- **Morgan** - HTTP request logger
+
+### Development Tools
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Git** - Version control
+- **VS Code** - Recommended IDE
 
 ## 📁 Project Structure
 
 ```
-Frontend/
-├── src/
-│   ├── config/
-│   │   └── api.js                 # 🔥 BACKEND API CONFIGURATION
-│   ├── contexts/
-│   │   ├── AuthContext.jsx        # Authentication state
-│   │   ├── ThemeContext.jsx       # Theme management
-│   │   └── ProjectContext.jsx     # Project state
-│   ├── pages/
-│   │   ├── Auth/                  # Login & Register
-│   │   ├── Dashboard/             # Main dashboard
-│   │   ├── Project/               # Project view
-│   │   ├── Editor/                # Rich text editor
-│   │   ├── Kanban/                # Kanban boards
-│   │   ├── Activity/              # Activity feed
-│   │   └── Settings/              # User settings
-│   ├── components/
-│   │   ├── Layout/                # Sidebar, TopBar
-│   │   ├── Modals/                # Modal dialogs
-│   │   └── Loader/                # Loading component
-│   ├── layouts/
-│   │   └── MainLayout.jsx         # Main app layout
-│   ├── App.jsx                    # Main app component
-│   ├── main.jsx                   # Entry point
-│   └── index.css                  # Global styles
-├── .env.example                    # Environment variables template
-├── package.json
+Froncort/
+├── Frontend/
+│   ├── src/
+│   │   ├── assets/              # Images, animations, icons
+│   │   ├── Components/          # Reusable UI components
+│   │   │   ├── Alert/           # Alert notifications
+│   │   │   ├── BugReport/       # Bug reporting system
+│   │   │   ├── Editor/          # Rich text editor
+│   │   │   ├── Collaboration/   # Real-time collab features
+│   │   │   ├── Footer/          # Footer components
+│   │   │   ├── Header/          # Header/TopBar
+│   │   │   ├── Home/            # Homepage components
+│   │   │   ├── Invitation/      # Team invitation
+│   │   │   ├── JoinRoom/        # Real-time workspace
+│   │   │   ├── Plans/           # Pricing plans
+│   │   │   ├── Profile/         # User profile
+│   │   │   └── Version/         # Version control
+│   │   ├── connections/         # API service layer
+│   │   ├── contexts/            # React contexts
+│   │   │   ├── AuthContext.jsx
+│   │   │   ├── ThemeContext.jsx
+│   │   │   └── ProjectContext.jsx
+│   │   ├── pages/               # Page components
+│   │   │   ├── Auth/            # Login, Register, Password Reset
+│   │   │   ├── Dashboard/       # Main dashboard
+│   │   │   ├── Editor/          # Page editor
+│   │   │   ├── Kanban/          # Kanban boards
+│   │   │   └── Settings/        # User settings
+│   │   ├── layouts/             # Layout wrappers
+│   │   ├── config/
+│   │   │   └── api.js           # 🔥 API ENDPOINTS CONFIGURATION
+│   │   ├── App.jsx              # Root component
+│   │   ├── main.jsx             # Entry point
+│   │   └── index.css            # Global styles
+│   ├── public/                  # Static assets
+│   ├── .env                     # Environment variables
+│   ├── package.json
+│   ├── vite.config.js
+│   └── tailwind.config.js
+│
+├── Backend/
+│   ├── models/                  # Mongoose schemas
+│   │   ├── User.model.js
+│   │   ├── Project.model.js
+│   │   ├── Page.model.js
+│   │   ├── Board.model.js
+│   │   ├── Card.model.js
+│   │   ├── Activity.model.js
+│   │   └── Invitation.model.js
+│   ├── Routes/                  # API routes
+│   │   ├── auth.routes.js
+│   │   ├── project.routes.js
+│   │   ├── page.routes.js
+│   │   ├── board.routes.js
+│   │   ├── card.routes.js
+│   │   ├── dashboard.routes.js
+│   │   └── invitation.routes.js
+│   ├── services/                # Business logic
+│   │   ├── email.service.js
+│   │   └── card-notification.service.js
+│   ├── middleware/              # Express middleware
+│   │   └── auth.middleware.js
+│   ├── utils/                   # Utility functions
+│   ├── server.js                # Server entry point
+│   ├── .env                     # Environment variables
+│   └── package.json
+│
 └── README.md
 ```
 
 ## 🚦 Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- Backend API server (see configuration section)
+- **Node.js 18+** and **npm/yarn**
+- **MongoDB** (local or Atlas)
+- **Gmail account** (for email notifications)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   cd Frontend
+   git clone https://github.com/prasadu-1619/synchronos.git
+   cd synchronos
    ```
-
-2. **Install dependencies**
+2. **Install dependencies for both Frontend and Backend**
    ```bash
+   # Install Backend dependencies
+   cd Backend
+   npm install
+   
+   # Install Frontend dependencies
+   cd ../Frontend
    npm install
    ```
 
-3. **Configure Backend API**
+3. **Configure Environment Variables**
    
-   Create a `.env` file in the Frontend folder:
+   **Backend `.env` file:**
    ```bash
+   cd Backend
    cp .env.example .env
    ```
+   
+   Edit `Backend/.env`:
+   ```env
+   # Server Configuration
+   PORT=5000
+   NODE_ENV=development
+   
+   # Database
+   MONGODB_URI=mongodb://localhost:27017/synchronos
+   # Or use MongoDB Atlas:
+   # MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/synchronos
+   
+   # JWT Secret
+   JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+   JWT_EXPIRE=7d
+   
+   # Email Configuration (Gmail)
+   EMAIL_SERVICE=gmail
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASSWORD=your-app-specific-password
+   
+   # Frontend URL (for email links)
+   FRONTEND_URL=http://localhost:5173
+   
+   # CORS Origin
+   CORS_ORIGIN=http://localhost:5173
+   ```
 
-   Edit `.env` and set your backend URLs:
+   **Frontend `.env` file:**
+   ```bash
+   cd ../Frontend
+   cp .env.example .env
+   ```
+   
+   Edit `Frontend/.env`:
    ```env
    VITE_API_BASE_URL=http://localhost:5000/api
    VITE_WS_URL=ws://localhost:5000
    ```
 
-   **Important:** All backend API endpoints are centrally configured in `src/config/api.js`. You only need to change the base URL in the `.env` file.
-
-4. **Start development server**
+4. **Start MongoDB**
    ```bash
+   # If using local MongoDB
+   mongod
+   
+   # Or use MongoDB Atlas (cloud) - no local MongoDB needed
+   ```
+
+5. **Start the Backend server**
+   ```bash
+   cd Backend
    npm run dev
    ```
+   Server will run on `http://localhost:5000`
 
-5. **Build for production**
+6. **Start the Frontend development server** (in a new terminal)
    ```bash
-   npm run build
+   cd Frontend
+   npm run dev
    ```
+   Frontend will run on `http://localhost:5173`
 
-## 🔧 Backend Configuration
+7. **Access the application**
+   Open your browser and navigate to `http://localhost:5173`
+
+### Build for Production
+
+**Frontend:**
+```bash
+cd Frontend
+npm run build
+# Build output will be in Frontend/dist/
+```
+
+**Backend:**
+```bash
+cd Backend
+npm start
+# Runs production server
+```
+
+## 🔧 Configuration
 
 ### Central API Configuration
 
-All API endpoints are defined in `src/config/api.js`:
+All API endpoints are centrally configured in `Frontend/src/config/api.js`:
 
 ```javascript
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
@@ -163,11 +309,46 @@ export const API_ENDPOINTS = {
   // Authentication
   LOGIN: `${API_BASE_URL}/auth/login`,
   REGISTER: `${API_BASE_URL}/auth/register`,
-  // ... more endpoints
+  LOGOUT: `${API_BASE_URL}/auth/logout`,
+  
+  // Projects
+  PROJECTS: `${API_BASE_URL}/projects`,
+  PROJECT_BY_ID: (id) => `${API_BASE_URL}/projects/${id}`,
+  
+  // Pages
+  PAGES: `${API_BASE_URL}/pages`,
+  PAGE_BY_ID: (id) => `${API_BASE_URL}/pages/${id}`,
+  
+  // Kanban Boards & Cards
+  BOARDS: `${API_BASE_URL}/boards`,
+  CARDS: `${API_BASE_URL}/cards`,
+  
+  // Dashboard
+  DASHBOARD_STATS: `${API_BASE_URL}/dashboard/stats`,
+  
+  // Real-time WebSocket
+  WEBSOCKET_URL: import.meta.env.VITE_WS_URL || 'ws://localhost:5000',
 };
 ```
 
-### Required Backend Endpoints
+**To change the backend URL, simply update the `.env` file - no code changes needed!**
+
+### Email Configuration (Gmail)
+
+1. **Enable 2-Factor Authentication** on your Gmail account
+2. **Generate an App Password:**
+   - Go to [Google Account Security](https://myaccount.google.com/security)
+   - Click "2-Step Verification"
+   - Scroll down and click "App passwords"
+   - Select "Mail" and "Other (Custom name)"
+   - Copy the generated 16-character password
+3. **Add to Backend `.env`:**
+   ```env
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASSWORD=your-16-char-app-password
+   ```
+
+### Required Backend API Endpoints
 
 Your backend should implement these endpoints:
 

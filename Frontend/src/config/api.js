@@ -61,6 +61,12 @@ export const API_ENDPOINTS = {
   
   // Pages helpers
   PAGE_LIST: `${API_BASE_URL}/pages`,
+  
+  // Search
+  SEARCH: `${API_BASE_URL}/search`,
+  
+  // Dashboard
+  DASHBOARD_STATS: `${API_BASE_URL}/dashboard/stats`,
 };
 
 export default API_BASE_URL;

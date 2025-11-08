@@ -4,7 +4,7 @@ import { Plus, FileText, Layout, Users, Calendar } from 'lucide-react';
 import { useProject } from '../../contexts/ProjectContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
-import CreateProjectModal from '../../components/Modals/CreateProjectModal';
+import CreateProjectModal from '../../Components/Modals/CreateProjectModal';
 
 const Dashboard = () => {
   const { projects, currentProject } = useProject();

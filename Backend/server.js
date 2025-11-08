@@ -7,15 +7,17 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 // Import routes
-import authRoutes from './routes/auth.routes.js';
-import projectRoutes from './routes/project.routes.js';
-import pageRoutes from './routes/page.routes.js';
-import boardRoutes from './routes/board.routes.js';
-import cardRoutes from './routes/card.routes.js';
-import activityRoutes from './routes/activity.routes.js';
-import userRoutes from './routes/user.routes.js';
-import notificationRoutes from './routes/notification.routes.js';
-import invitationRoutes from './routes/invitation.routes.js';
+import authRoutes from './Routes/auth.routes.js';
+import projectRoutes from './Routes/project.routes.js';
+import pageRoutes from './Routes/page.routes.js';
+import boardRoutes from './Routes/board.routes.js';
+import cardRoutes from './Routes/card.routes.js';
+import activityRoutes from './Routes/activity.routes.js';
+import userRoutes from './Routes/user.routes.js';
+import notificationRoutes from './Routes/notification.routes.js';
+import invitationRoutes from './Routes/invitation.routes.js';
+import searchRoutes from './Routes/search.routes.js';
+import dashboardRoutes from './Routes/dashboard.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -55,6 +57,8 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/invitations', invitationRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
