@@ -7,12 +7,24 @@ import { useAuth } from '../../contexts/AuthContext';
 import CreateProjectModal from '../../Components/Modals/CreateProjectModal';
 
 const Dashboard = () => {
-  const { projects, currentProject } = useProject();
+  const { projects, currentProject, fetchProjects } = useProject();
   const { user } = useAuth();
   const { isDark } = useTheme();
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [recentActivity, setRecentActivity] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Auto-refresh dashboard data when component mounts or user navigates to it
+  useEffect(() => {
+    const refreshDashboard = async () => {
+      setIsRefreshing(true);
+      await fetchProjects();
+      setIsRefreshing(false);
+    };
+    
+    refreshDashboard();
+  }, []);
 
   const stats = [
     {

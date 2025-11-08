@@ -59,8 +59,8 @@ const Register = () => {
     });
 
     if (result.success) {
-      // Force a full page reload to refresh dashboard data
-      window.location.href = '/dashboard';
+      // Navigate to dashboard using React Router
+      navigate('/dashboard');
     } else {
       setError(result.error);
     }

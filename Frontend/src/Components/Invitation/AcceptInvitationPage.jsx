@@ -46,9 +46,9 @@ const AcceptInvitationPage = () => {
           localStorage.setItem('user', JSON.stringify(response.data.user));
         }
 
-        // Redirect to project after 3 seconds
+        // Navigate to project after 3 seconds
         setTimeout(() => {
-          window.location.href = `/project/${response.data.project._id}`;
+          navigate(`/project/${response.data.project._id}`);
         }, 3000);
       }
     } catch (error) {
@@ -106,9 +106,9 @@ const AcceptInvitationPage = () => {
         setSuccess(true);
         setInvitation(response.data.project);
 
-        // Redirect to project after 3 seconds
+        // Navigate to project after 3 seconds
         setTimeout(() => {
-          window.location.href = `/project/${response.data.project._id}`;
+          navigate(`/project/${response.data.project._id}`);
         }, 3000);
       }
     } catch (error) {
@@ -285,7 +285,7 @@ const AcceptInvitationPage = () => {
               </p>
             </div>
             <button
-              onClick={() => window.location.href = `/project/${invitation._id}`}
+              onClick={() => navigate(`/project/${invitation._id}`)}
               className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white transition-colors"
             >
               Go Now
