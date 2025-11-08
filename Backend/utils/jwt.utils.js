@@ -19,7 +19,8 @@ export const sendTokenResponse = (user, statusCode, res, message = 'Success') =>
     ),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    path: '/',
   };
 
   // Remove password from output
