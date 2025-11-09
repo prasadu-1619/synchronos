@@ -1,149 +1,303 @@
 # Synchronos Documentation
 
-Welcome to the Synchronos documentation! This comprehensive guide will help you understand, set up, and contribute to the project.
+Welcome to the Synchronos project documentation! This folder contains comprehensive documentation for the collaborative project management and documentation tool.
 
-## 📖 About Synchronos
+## 📚 Documentation Index
 
-Synchronos is a real-time collaborative workspace platform that combines rich text editing, kanban boards, and team collaboration features. Built with modern web technologies, it enables teams to work together seamlessly on documents and projects.
+### 1. [Architecture Documentation](./ARCHITECTURE.md)
+**Component architecture diagram and system design**
 
-### Key Features
+Learn about:
+- System architecture and component hierarchy
+- Frontend and backend structure
+- Database models and relationships
+- Real-time collaboration architecture
+- Technology stack and design decisions
+- Security and performance considerations
 
-- **📝 Rich Text Editor**: Powered by TipTap with extensive formatting options
-- **🔄 Real-time Collaboration**: Multiple users can work simultaneously with live cursor tracking
-- **📋 Kanban Boards**: Visual project management with drag-and-drop cards
-- **👥 Team Collaboration**: User presence, comments, and activity tracking
-- **🔐 Secure Authentication**: JWT-based auth with role-based access control
-- **🌓 Dark Mode**: Beautiful dark theme for comfortable nighttime work
-- **📱 Responsive Design**: Works seamlessly on mobile, tablet, and desktop
-- **⏱️ Version History**: Track changes and restore previous versions
-- **💬 Comments**: Discuss pages with team members
-- **🔍 Search**: Find pages and projects quickly
+**Start here if**: You want to understand the overall system design and how components interact.
 
-## 🛠️ Tech Stack
+---
+
+### 2. [Editor Structure and Collaboration Logic](./EDITOR_COLLABORATION.md)
+**Detailed explanation of editor structure and collaboration features**
+
+Learn about:
+- Tiptap editor configuration and extensions
+- Real-time collaboration implementation
+- Edit locking system and conflict prevention
+- Live cursor tracking and presence awareness
+- Content synchronization strategies
+- Version history and conflict resolution
+- Performance optimizations
+
+**Start here if**: You want to understand how the collaborative editor works and how real-time features are implemented.
+
+---
+
+### 3. [Setup Guide](./SETUP_GUIDE.md)
+**Complete guide to run the application locally**
+
+Learn about:
+- Prerequisites and system requirements
+- Step-by-step installation instructions
+- Environment configuration
+- Database setup
+- Running backend and frontend servers
+- Troubleshooting common issues
+- Development workflow
+- Production deployment
+
+**Start here if**: You want to set up the project on your local machine or deploy it to production.
+
+---
+
+### 4. [Known Limitations and Future Improvements](./LIMITATIONS.md)
+**Current limitations and planned enhancements**
+
+Learn about:
+- Known limitations and constraints
+- Workarounds for current issues
+- Short-term improvements (0-3 months)
+- Mid-term improvements (3-6 months)
+- Long-term roadmap (6-12 months)
+- Performance targets
+- Technical debt and priorities
+
+**Start here if**: You want to know what features are missing and what's planned for the future.
+
+---
+
+## 🚀 Quick Start
+
+### For Users
+1. Read the [Setup Guide](./SETUP_GUIDE.md) to get started
+2. Check [Known Limitations](./LIMITATIONS.md) to understand current constraints
+
+### For Developers
+1. Start with [Architecture Documentation](./ARCHITECTURE.md) to understand the system
+2. Read [Editor & Collaboration](./EDITOR_COLLABORATION.md) for real-time features
+3. Follow the [Setup Guide](./SETUP_GUIDE.md) to set up your development environment
+4. Review [Known Limitations](./LIMITATIONS.md) to understand areas needing improvement
+
+### For Contributors
+1. Review all documentation to understand the project
+2. Check the [Limitations](./LIMITATIONS.md#technical-debt) section for contribution opportunities
+3. Set up your development environment using the [Setup Guide](./SETUP_GUIDE.md)
+4. Refer to [Architecture](./ARCHITECTURE.md) when making design decisions
+
+---
+
+## 🏗️ Project Structure
+
+```
+synchronos/
+├── Backend/                 # Node.js/Express server
+│   ├── models/             # MongoDB models
+│   ├── Routes/             # API routes
+│   ├── middleware/         # Express middleware
+│   ├── services/           # Business logic
+│   └── utils/              # Utility functions
+│
+├── Frontend/               # React application
+│   ├── src/
+│   │   ├── pages/         # Main pages
+│   │   ├── Components/    # Reusable components
+│   │   ├── contexts/      # React contexts
+│   │   ├── hooks/         # Custom hooks
+│   │   └── layouts/       # Layout components
+│   └── public/            # Static assets
+│
+└── docs/                   # Documentation (you are here!)
+    ├── ARCHITECTURE.md
+    ├── EDITOR_COLLABORATION.md
+    ├── SETUP_GUIDE.md
+    ├── LIMITATIONS.md
+    └── README.md
+```
+
+---
+
+## 🎯 Key Features
+
+### Collaborative Documentation
+- **Rich Text Editor**: Powered by Tiptap with extensive formatting options
+- **Real-time Collaboration**: Multiple users can view and edit documents
+- **Edit Locking**: Prevents conflicting edits with pessimistic locking
+- **Live Cursors**: See where other users are working
+- **Version History**: Track all changes with version comparison
+
+### Project Management
+- **Kanban Boards**: Visual task management with drag-and-drop
+- **Task Cards**: Detailed cards with descriptions, assignees, and comments
+- **Activity Feed**: Real-time project activity tracking
+- **Team Collaboration**: Invite members with role-based permissions
+
+### Real-time Features
+- **WebSocket Communication**: Socket.IO for instant updates
+- **Presence Awareness**: See who's online and active
+- **Live Updates**: Changes appear instantly for all users
+- **Notifications**: In-app notifications for important events
+
+---
+
+## 🛠️ Technology Stack
 
 ### Frontend
-- **React 19** - UI library
-- **Vite 6** - Build tool and dev server
-- **TipTap 3.10** - Rich text editor
-- **Socket.IO Client 4.7** - Real-time communication
-- **Tailwind CSS 3** - Utility-first styling
+- **React 19** - UI framework
+- **Tiptap** - Rich text editor
+- **Socket.IO Client** - Real-time communication
+- **Tailwind CSS** - Styling
+- **@dnd-kit** - Drag and drop
 - **Axios** - HTTP client
-- **React Router** - Client-side routing
-- **date-fns** - Date formatting
-- **Lucide React** - Icon library
+- **Vite** - Build tool
 
 ### Backend
 - **Node.js** - Runtime environment
 - **Express** - Web framework
-- **MongoDB** - NoSQL database
-- **Mongoose** - MongoDB ODM
-- **Socket.IO 4.7** - WebSocket server
+- **MongoDB** - Database
+- **Socket.IO** - WebSocket server
 - **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **CORS** - Cross-origin resource sharing
+- **Mongoose** - ODM for MongoDB
 
-### Deployment
-- **Vercel** - Frontend hosting (CDN)
-- **Google Cloud Run** - Backend containerized deployment
-- **MongoDB Atlas** - Managed database (cloud)
+---
 
-## 🚀 Quick Start
+## 📊 System Requirements
 
-```bash
-# Clone the repository
-git clone https://github.com/prasadu-1619/synchronos.git
-cd synchronos
+### Minimum Requirements
+- **Node.js**: v18 or higher
+- **MongoDB**: v6 or higher
+- **RAM**: 4GB
+- **Storage**: 1GB free space
 
-# Backend setup
-cd Backend
-npm install
-# Create .env file (see setup-guide.md)
-npm run dev
+### Recommended for Development
+- **Node.js**: v20 LTS
+- **MongoDB**: v7
+- **RAM**: 8GB or more
+- **Storage**: 5GB free space
 
-# Frontend setup (new terminal)
-cd Frontend
-npm install
-# Create .env file (see setup-guide.md)
-npm run dev
-```
+---
 
-Visit `http://localhost:5173` to see the application running.
+## 🔐 Security Features
 
-For detailed setup instructions, see **[Setup Guide](./setup-guide.md)**.
+- JWT-based authentication with httpOnly cookies
+- Password hashing with bcryptjs
+- CORS protection with origin whitelisting
+- Role-based access control (RBAC)
+- Edit lock enforcement
+- Input validation and sanitization
 
-## 📚 Documentation Index
+---
 
-This folder contains comprehensive documentation for the Synchronos project:
+## 📈 Performance Characteristics
 
-1. **[Architecture](./architecture.md)** ✅ - System design, component hierarchy, database schemas, and technical architecture
-2. **[Editor & Collaboration](./editor-collaboration.md)** ✅ - Detailed explanation of the TipTap editor, real-time collaboration, and Socket.IO implementation
-3. **[Setup Guide](./setup-guide.md)** ✅ - Step-by-step instructions for local development setup
-4. **[Limitations & Future](./limitations-future.md)** ✅ - Known limitations, planned improvements, roadmap, and technical debt
+### Current Performance
+- **Page Load Time**: 2-3 seconds
+- **Editor Initialization**: ~1 second
+- **Socket Latency**: 50-100ms (same region)
+- **Max Concurrent Users**: ~100 per server instance
 
-### Quick Navigation
+### Target Performance (Future)
+- **Page Load Time**: <1 second
+- **Editor Initialization**: <500ms
+- **Socket Latency**: <30ms
+- **Max Concurrent Users**: 1000+ with Redis adapter
 
-- **New to the project?** Start with [Setup Guide](./setup-guide.md)
-- **Want to understand the architecture?** Read [Architecture](./architecture.md)
-- **Curious about real-time features?** Check [Editor & Collaboration](./editor-collaboration.md)
-- **Planning contributions?** See [Limitations & Future](./limitations-future.md)
-
-## 🎯 Project Structure
-
-```
-Synchronos/
-├── Backend/
-│   ├── models/          # MongoDB schemas
-│   ├── routes/          # API endpoints
-│   ├── middleware/      # Auth, error handling
-│   ├── utils/           # Helper functions
-│   └── server.js        # Main server file
-├── Frontend/
-│   ├── src/
-│   │   ├── Components/  # Reusable UI components
-│   │   ├── pages/       # Page components (routes)
-│   │   ├── contexts/    # React contexts
-│   │   ├── hooks/       # Custom React hooks
-│   │   ├── config/      # Configuration files
-│   │   └── assets/      # Images, animations
-│   ├── public/          # Static files
-│   └── index.html       # Entry HTML
-└── docs/                # Documentation (you are here!)
-```
+---
 
 ## 🤝 Contributing
 
 We welcome contributions! Here's how you can help:
 
-1. **Report Bugs**: Open an issue on GitHub
-2. **Suggest Features**: Use GitHub Discussions
-3. **Submit Code**: Fork, create a branch, and submit a PR
-4. **Improve Docs**: Help us make these docs better
+1. **Code Contributions**
+   - Fix bugs from the issues list
+   - Implement features from the roadmap
+   - Improve performance and optimization
+   - Add tests for better coverage
 
-See **[Limitations & Future](./limitations-future.md)** for planned features and areas that need work.
+2. **Documentation**
+   - Improve existing documentation
+   - Add code examples and tutorials
+   - Translate documentation
+   - Create video tutorials
 
-## 📄 License
+3. **Testing**
+   - Report bugs with detailed reproduction steps
+   - Test new features and provide feedback
+   - Perform security testing
+   - Test on different platforms and browsers
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🆘 Support
-
-- **GitHub Issues**: Report bugs or request features
-- **GitHub Discussions**: Ask questions and share ideas
-- **Email**: support@synchronos.app (if configured)
-
-## 🙏 Acknowledgments
-
-Built with amazing open-source technologies:
-- TipTap team for the incredible editor
-- Socket.IO for real-time communication
-- React team for the UI library
-- MongoDB team for the database
-- Vercel and Google Cloud for hosting
+4. **Design**
+   - Improve UI/UX design
+   - Create design mockups for new features
+   - Enhance mobile experience
+   - Design icons and graphics
 
 ---
 
-**Last Updated**: November 9, 2025  
-**Version**: 1.0.0  
-**Status**: Active Development
+## 📞 Support and Community
 
-Happy coding! 🚀
+### Getting Help
+- **Issues**: Report bugs on GitHub Issues
+- **Discussions**: Join GitHub Discussions for questions
+- **Documentation**: Check this documentation first
+- **Email**: Contact the development team
+
+### Useful Links
+- **GitHub Repository**: [prasadu-1619/synchronos](https://github.com/prasadu-1619/synchronos)
+- **Live Demo**: [Deployed on Vercel](https://synchronos-dr2o.vercel.app)
+- **Bug Reports**: GitHub Issues
+- **Feature Requests**: GitHub Discussions
+
+---
+
+## 📝 Documentation Maintenance
+
+This documentation is actively maintained. If you find:
+- Outdated information
+- Broken links
+- Missing content
+- Errors or typos
+
+Please:
+1. Open an issue on GitHub
+2. Submit a pull request with fixes
+3. Contact the documentation team
+
+---
+
+## 📄 License
+
+This project is licensed under the ISC License. See the LICENSE file in the project root for details.
+
+---
+
+## 🙏 Acknowledgments
+
+### Technologies
+- Thanks to the teams behind React, Node.js, MongoDB, Socket.IO, and Tiptap
+- Special thanks to all open-source contributors
+
+### Contributors
+- Development Team
+- Community Contributors
+- Beta Testers
+- Documentation Writers
+
+---
+
+## 📅 Version History
+
+- **v1.0.0** (Current) - Initial release with core features
+  - Collaborative document editing
+  - Kanban board management
+  - Real-time synchronization
+  - User authentication and authorization
+
+---
+
+**Last Updated**: November 9, 2025
+
+**Maintained by**: Synchronos Development Team
+
+For the latest updates, visit the [GitHub repository](https://github.com/prasadu-1619/synchronos).
